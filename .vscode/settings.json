@@ -154,5 +154,9 @@
         "orbit"
     ],
     "emberprobe.sampleFrequencyHz": 30,
-    "orbit.defaultProgram": "d:\\rm\\chezu\\balance_infantry(chuan)\\gimbal\\SUEP_RM2027_balance_gimbal\\build\\standard_tpye_c.elf"
+    "orbit.defaultProgram": "d:\\rm\\chezu\\balance_infantry(chuan)\\gimbal\\SUEP_RM2027_balance_gimbal\\build\\standard_tpye_c.elf",
+    "python.analysis.extraPaths": [
+        "C:\\Users\\cheng\\.kendryte\\k230_canmv_stubs\\f76584b175753c3603e00a1559baed550b5b37fc"
+    ],
+    "python.analysis.stubPath": "C:\\Users\\cheng\\.kendryte\\k230_canmv_pylance\\7a7eb35a5f329ad9\\typings"
 }
