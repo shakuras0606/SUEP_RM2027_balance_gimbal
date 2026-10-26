@@ -1,0 +1,61 @@
+# Duplicate files
+*(*)*
+
+# MATLAB files
+application/chassis/matlab_balance/slprj/
+*/slprj/
+*/codegen/
+*.prj
+
+# CMake build directories
+build/
+
+# Keil v5 files
+*.bak
+*.lst
+*.lnp
+*.obj
+*.tmp
+*.TMP
+*.__i
+*.crf
+*.o
+*.d
+*.axf
+*.dep
+*.uvopt
+*.htm
+*.hsc
+~*
+*.map
+*uvgui*
+*.uvoptx
+*.sct
+*JLinkLog.txt
+*.dbgconf
+.vscode/tags
+*.hex
+*.lnk
+
+*.scvd
+*.iex
+*.ini
+# IDE / editor caches (keep shared .vscode JSON configuration)
+.idea/
+# AI tool-generated debug skill packs (machine-specific, regenerated per workspace)
+.agents/
+.cache/
+.vscode/ipch/
+.vscode/.browse.VC.db*
+*.swp
+*.swo
+
+# Python caches
+__pycache__/
+.pytest_cache/
+*.pyc
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+Desktop.ini

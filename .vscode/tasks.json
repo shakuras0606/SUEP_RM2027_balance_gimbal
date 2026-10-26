@@ -1,0 +1,120 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "cmake configure",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--preset",
+                "default"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "--preset",
+                "default"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "dependsOn": [
+                "cmake configure"
+            ],
+            "dependsOrder": "sequence",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": "$gcc",
+            "detail": "编译工程（先自动执行 cmake configure），快捷键 Ctrl+Shift+B"
+        },
+        {
+            "label": "flash (OpenOCD CMSIS-DAP)",
+            "type": "process",
+            "command": "D:/edge download/OpenOCD-20260302-0.12.0/bin/openocd.exe",
+            "args": [
+                "-s",
+                "D:/edge download/OpenOCD-20260302-0.12.0/share/openocd/scripts",
+                "-f",
+                "interface/cmsis-dap.cfg",
+                "-c",
+                "transport select swd",
+                "-c",
+                "adapter speed 400",
+                "-f",
+                "target/stm32f4x.cfg",
+                "-c",
+                "program build/standard_tpye_c.elf verify reset exit"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "dependsOn": [
+                "build"
+            ],
+            "dependsOrder": "sequence",
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "一键编译并下载：先 build，再经 DAPLink(CMSIS-DAP) 烧录 build/standard_tpye_c.elf"
+        },
+        {
+            "label": "flash only (OpenOCD CMSIS-DAP)",
+            "type": "process",
+            "command": "D:/edge download/OpenOCD-20260302-0.12.0/bin/openocd.exe",
+            "args": [
+                "-s",
+                "D:/edge download/OpenOCD-20260302-0.12.0/share/openocd/scripts",
+                "-f",
+                "interface/cmsis-dap.cfg",
+                "-c",
+                "transport select swd",
+                "-c",
+                "adapter speed 400",
+                "-f",
+                "target/stm32f4x.cfg",
+                "-c",
+                "program build/standard_tpye_c.elf verify reset exit"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "仅烧录（不重新编译）：DAPLink(CMSIS-DAP)"
+        },
+        {
+            "label": "flash only (OpenOCD ST-Link)",
+            "type": "process",
+            "command": "D:/edge download/OpenOCD-20260302-0.12.0/bin/openocd.exe",
+            "args": [
+                "-s",
+                "D:/edge download/OpenOCD-20260302-0.12.0/share/openocd/scripts",
+                "-f",
+                "interface/stlink.cfg",
+                "-c",
+                "transport select hla_swd",
+                "-c",
+                "adapter speed 4000",
+                "-f",
+                "target/stm32f4x.cfg",
+                "-c",
+                "program build/standard_tpye_c.elf verify reset exit"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "build",
+            "problemMatcher": [],
+            "detail": "仅烧录（不重新编译）：ST-Link"
+        }
+    ]
+}
