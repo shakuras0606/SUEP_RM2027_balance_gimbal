@@ -63,6 +63,10 @@
 #define GIMBAL_UPPER_LIMIT_PITCH ( 0.60f)
 #define GIMBAL_LOWER_LIMIT_PITCH (-0.40f)
 
+//yaw轴相对底盘的活动范围限位(rad)，仅在GIMBAL_IMU手动模式下生效，自瞄模式不限制
+#define GIMBAL_UPPER_LIMIT_YAW ( 1.5707964f)   // +π/2
+#define GIMBAL_LOWER_LIMIT_YAW (-1.5707964f)   // -π/2
+
 //电机角度中值设置
 #define GIMBAL_DIRECT_PITCH_MID (-2.08f)  //云台初始化正对齐的时候使用的pitch轴正中心量
 #define GIMBAL_DIRECT_YAW_MID   (-1.05f)     //云台初始化正对齐的时候使用的yaw轴正中心量
@@ -121,21 +125,21 @@
 //电机ID
 #define TRIGGER_MOTOR_ID 2
 #define FRIC_MOTOR_R_ID 3
-#define FRIC_MOTOR_L_ID 6
+#define FRIC_MOTOR_L_ID 4
 
 //电机can口
 #define TRIGGER_MOTOR_CAN 2
 #define FRIC_MOTOR_R_CAN 1
 #define FRIC_MOTOR_L_CAN 1
 
-//电机std_id
+//电机std_id(已废弃：发射机构 DJI 电机控制帧现由电机 id 自动决定 0x200/0x1FF)
 #define STD_ID 0x200
 
 //单环拨弹速度(rad/s，电机轴；MG4005-i10 电机侧最高约 335rad/s)
 #define TRIGGER_SPEED               (200.0f)
 //摩擦轮速度
-#define FRIC_R_SPEED                  (666.0f) 
-#define FRIC_L_SPEED                  (-666.0f) 
+#define FRIC_R_SPEED                  (-666.0f) 
+#define FRIC_L_SPEED                  (666.0f) 
 #define FRIC_SPEED_LIMIT            (600.0f) 
 
 //电机反馈码盘值范围
@@ -168,11 +172,11 @@
 //   ANGEL_PID: KP=20   KI=0.5 KD=0.0 MAX_OUT=10000 MAX_IOUT=1000
 
 //拨弹轮电机PID速度环：输入电机轴转速(rad/s)，输出转矩电流(A)
-#define TRIGGER_SPEED_PID_KP (0.1f)
-#define TRIGGER_SPEED_PID_KI (0.0005f)
-#define TRIGGER_SPEED_PID_KD (0.0001f)
+#define TRIGGER_SPEED_PID_KP (0.5f)
+#define TRIGGER_SPEED_PID_KI (0.0007f)
+#define TRIGGER_SPEED_PID_KD (0.0003f)
 
-#define TRIGGER_SPEED_PID_MAX_OUT (5.0f)   // (A)软件限流，MG4005-i10 满量程 ±33A
+#define TRIGGER_SPEED_PID_MAX_OUT (15.0f)   // (A)软件限流，MG4005-i10 满量程 ±33A
 #define TRIGGER_SPEED_PID_MAX_IOUT (1.0f)  // (A)
 
 // 单发模式 拨弹轮电机PID角度环：输入电机轴角度误差(rad)，输出电机轴转速期望(rad/s)

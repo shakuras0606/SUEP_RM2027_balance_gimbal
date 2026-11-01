@@ -169,6 +169,10 @@ void GimbalInit(void)
    gimbal_direct.upper_limit.pitch=GIMBAL_UPPER_LIMIT_PITCH;
 
    gimbal_direct.lower_limit.pitch=GIMBAL_LOWER_LIMIT_PITCH;
+
+   gimbal_direct.upper_limit.yaw=GIMBAL_UPPER_LIMIT_YAW;
+
+   gimbal_direct.lower_limit.yaw=GIMBAL_LOWER_LIMIT_YAW;
    //step3 PID数据清零，设置PID参数
    const static fp32 gimbal_yaw_angle[3]={KP_GIMBAL_YAW_ANGLE,KI_GIMBAL_YAW_ANGLE,KD_GIMBAL_YAW_ANGLE};
    const static fp32 gimbal_yaw_velocity[3]={KP_GIMBAL_YAW_VELOCITY,KI_GIMBAL_YAW_VELOCITY,KD_GIMBAL_YAW_VELOCITY};
@@ -292,6 +296,40 @@ void GimbalObserver(void)
 
 }
 
+/*-------------------- Yaw joint limit --------------------*/
+
+/**
+ * @brief          限制yaw期望值，使yaw关节相对底盘的偏角不超出±GIMBAL_*_LIMIT_YAW
+ * @param[in]      none
+ * @retval         none
+ * @note           仅GIMBAL_IMU手动模式调用，自瞄模式不限制。
+ *                 reference.yaw是世界系角度，这里用“当前关节角 + 待转角度”预测转到位
+ *                 后的关节角，只在超出限位时把期望拉回边界；未超限时不动期望值，
+ *                 避免底盘跟随旋转时把云台期望一起拖走。
+ */
+static void GimbalYawJointLimit(void)
+{
+  fp32 joint_now=CmdGimbalJointState(AX_YAW);
+  fp32 delta=loop_fp32_constrain(gimbal_direct.reference.yaw-gimbal_direct.feedback_pos.yaw,-M_PI,M_PI);
+  fp32 delta_upper=gimbal_direct.upper_limit.yaw-joint_now;
+  fp32 delta_lower=gimbal_direct.lower_limit.yaw-joint_now;
+
+  if (delta>delta_upper)
+  {
+    delta=delta_upper;
+  }
+  else if (delta<delta_lower)
+  {
+    delta=delta_lower;
+  }
+  else
+  {
+    return;
+  }
+
+  gimbal_direct.reference.yaw=loop_fp32_constrain(gimbal_direct.feedback_pos.yaw+delta,-M_PI,M_PI);
+}
+
 /*-------------------- Reference --------------------*/
 
 /**
@@ -332,6 +370,9 @@ void GimbalReference(void)
       gimbal_direct.reference.pitch= fp32_constrain(gimbal_direct.reference.pitch-fp32_deadline(gimbal_direct.rc->rc.ch[3], REMOTE_CONTROLLER_MIN_DEADLINE,REMOTE_CONTROLLER_MAX_DEADLINE)/REMOTE_CONTROLLER_SENSITIVITY,GIMBAL_LOWER_LIMIT_PITCH+gimbal_direct.angle_zero_for_imu,GIMBAL_UPPER_LIMIT_PITCH+gimbal_direct.angle_zero_for_imu);
       gimbal_direct.reference.yaw = loop_fp32_constrain(gimbal_direct.reference.yaw-fp32_deadline(gimbal_direct.rc->rc.ch[2], REMOTE_CONTROLLER_MIN_DEADLINE,REMOTE_CONTROLLER_MAX_DEADLINE)/REMOTE_CONTROLLER_SENSITIVITY,-M_PI,M_PI);
     }
+
+    //手动IMU模式下限制yaw相对底盘的活动范围，自瞄模式不限制
+    //GimbalYawJointLimit();
   }
 
   else if (gimbal_direct.mode == GIMBAL_AUTO_AIM)
