@@ -1,4 +1,5 @@
-# SUEP_RM2027_balance_gimbal
+# SUEP_RM2027_balance_chassis
+## 这是一个基于深北莫电控框架开发的串腿平衡步兵的云台电控工程，采用Cmake构建，openocd下载调试
 
 <div align=center>
 
@@ -86,7 +87,7 @@
   - [x] 《Unity》
   - [x] 《你》
 
-## 开发工具
+## 开发工具（已经舍弃keil5）
 
 使用VSCode作为代码编辑器，Keil5作为IDE。
 > 虽然keil5老，但在嵌入式调试以及环境配置方面是非常简单易上手的。**千万不要用keil5来编辑代码！！！**
@@ -128,8 +129,3 @@
 
 如发现本项目中的问题，请添加至[问题列表](./doc/questions.md)并与相关负责人联系，如果有解决方案可以提交pull request。
 
-## 通讯信息
-
-- 作者 `小企鹅` 微信：18968748997 QQ：1357482552
-- 交流群
-  > ![qrcode](./doc/pic/qrcode_1743387096263.jpg)
